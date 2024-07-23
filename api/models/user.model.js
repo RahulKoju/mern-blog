@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import crypto, { randomBytes } from "crypto";
+import { type } from "os";
 const userSchema=new mongoose.Schema(
     {
         fullname:{
@@ -15,6 +17,9 @@ const userSchema=new mongoose.Schema(
             type:String,
             required:true,
         },
+        salt:{
+            type:String,
+        },
         profilePicture:{
             type:String,
             default:"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
@@ -25,5 +30,14 @@ const userSchema=new mongoose.Schema(
         },
     },{timestamps:true}
 );
+userSchema.pre("save",function(next){
+    const user=this;
+    if(!user.isModified("password")) return;
+    const salt=crypto.randomBytes(16).toString();
+    const hashedPassword= crypto.createHmac("sha256",salt).update(user.password).digest("hex");
+    this.salt=salt;
+    this.password=hashedPassword;
+    next();
+});
 const User=mongoose.model('User',userSchema);
 export default User;
