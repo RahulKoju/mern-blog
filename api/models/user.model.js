@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import crypto, { randomBytes } from "crypto";
-import { type } from "os";
 const userSchema=new mongoose.Schema(
     {
         fullname:{
