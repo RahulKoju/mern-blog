@@ -15,7 +15,7 @@ export const handleSignUp = async (req, res, next) => {
   const newUser = new User({ fullname, email, password });
   try {
     await newUser.save();
-    res.json("signin successfull");
+    res.json("sign Up successfull");
   } catch (error) {
     next(error);
   }
