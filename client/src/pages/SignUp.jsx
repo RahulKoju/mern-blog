@@ -6,7 +6,7 @@ export default function SignUp() {
   const [formData, setFormData] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
@@ -24,11 +24,11 @@ export default function SignUp() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
+      setLoading(false);
       if (data.success === false) {
         return setErrorMessage(data.message);
       }
-      setLoading(false);
-      if(res.ok){
+      if (res.ok) {
         navigate("/sign-in");
       }
     } catch (error) {
@@ -82,7 +82,11 @@ export default function SignUp() {
                 onChange={handleChange}
               />
             </div>
-            <Button gradientDuoTone="purpleToPink" type="submit">
+            <Button
+              gradientDuoTone="purpleToPink"
+              type="submit"
+              disabled={loading}
+            >
               {loading ? (
                 <>
                   <Spinner size="sm" />
@@ -99,11 +103,13 @@ export default function SignUp() {
               Sign In
             </Link>
           </div>
-          {errorMessage && (
-            <Alert className="mt-5" color="failure">
-              {errorMessage}
-            </Alert>
-          )}
+          <div className="h-10 mt-5">
+            {errorMessage && (
+              <Alert color="failure">
+                {errorMessage}
+              </Alert>
+            )}
+          </div>
         </div>
       </div>
     </div>
