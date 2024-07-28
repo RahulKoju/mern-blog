@@ -39,3 +39,27 @@ export const handleSignIn = async (req, res, next) => {
     next(error);
   }
 };
+export const handleLoginFailure = (req, res) => {
+  res.status(401).json({
+    error: true,
+    message: "Login Failure",
+  });
+};
+export const handleLoginSuccess = (req, res) => {
+  if (req.user) {
+    res.status(200).json({
+      error: false,
+      message: "Successfully Logged In",
+      user: req.user,
+    });
+  } else {
+    res.status(403).json({
+      error: true,
+      message: "Not Authorized",
+    });
+  }
+};
+export const handleLogout = (req, res) => {
+  req.logout();
+  res.redirect(process.env.CLIENT_URL);
+};
