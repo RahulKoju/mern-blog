@@ -6,7 +6,7 @@ import authRoutes from "./routes/auth.routes.js";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 import cors from "cors";
 import passport from "passport";
-import cookieSession from "cookie-session";
+import session from "express-session";
 import passportStrategy from "./services/passport.services.js";
 const PORT = process.env.PORT || 8000;
 
@@ -24,10 +24,11 @@ const app = express();
 app.use(express.json());
 app.use(errorMiddleware);
 app.use(
-  cookieSession({
-    name: "session",
-    keys: ["rahul"],
-    maxAge: 24 * 60 * 60 * 100,
+  session({
+    secret: "rahul", // Use a secure secret in production
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 }, // 24 hours
   })
 );
 app.use(passport.initialize());
