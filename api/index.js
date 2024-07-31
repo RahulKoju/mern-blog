@@ -3,7 +3,9 @@ dotenv.config();
 import express from "express";
 import mongoose from "mongoose";
 import authRoutes from "./routes/auth.routes.js";
+import userRoutes from "./routes/user.routes.js";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
+import cookieParser from "cookie-parser";
 //import cors from "cors";
 //import passport from "passport";
 //import session from "express-session";
@@ -22,6 +24,7 @@ const app = express();
 
 //Middlewares
 app.use(express.json());
+app.use(cookieParser());
 app.use(errorMiddleware);
 // app.use(
 //   session({
@@ -43,6 +46,7 @@ app.use(errorMiddleware);
 
 //Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server started at port:${PORT}`);
