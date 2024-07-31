@@ -34,8 +34,8 @@ const userSchema = new mongoose.Schema(
 );
 userSchema.pre("save", function (next) {
   const user = this;
-  if (!user.isModified("password")) return;
-  const salt = crypto.randomBytes(16).toString();
+  if (!user.isModified("password")) return next();
+  const salt = crypto.randomBytes(16).toString("hex");
   const hashedPassword = crypto
     .createHmac("sha256", salt)
     .update(user.password)
