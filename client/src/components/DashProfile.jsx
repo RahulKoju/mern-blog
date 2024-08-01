@@ -8,9 +8,9 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import {
-  uploadStart,
-  uploadSucess,
-  uploadFailure,
+  updateStart,
+  updateSucess,
+  updateFailure,
 } from "../redux/user/userSlice";
 import { app } from "../firebaseConfig";
 import { CircularProgressbar } from "react-circular-progressbar";
@@ -73,22 +73,22 @@ export default function DashProfile() {
       return;
     }
     try {
-      dispatch(uploadStart());
+      dispatch(updateStart());
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "applicaion/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
       if (!res.ok) {
-        dispatch(uploadFailure(data.message));
+        dispatch(updateFailure(data.message));
       } else {
-        dispatch(uploadSucess(data));
+        dispatch(updateSucess(data));
       }
     } catch (error) {
-      dispatch(uploadFailure(error.message));
+      dispatch(updateFailure(error.message));
     }
   };
   return (
