@@ -21,6 +21,7 @@ export const handleSignUp = async (req, res, next) => {
   }
 };
 export const handleSignIn = async (req, res, next) => {
+  console.log(req.body);
   const { email, password } = req.body;
   if (!email || !password || email === "" || password === "") {
     return next(errorHandler(400, "All feilds are required."));
@@ -36,30 +37,6 @@ export const handleSignIn = async (req, res, next) => {
       })
       .json(rest);
   } catch (error) {
-    next(error);
+    next(errorHandler(error.statusCode || 500, error.message || "An error occurred during sign in"));
   }
-};
-export const handleLoginFailure = (req, res) => {
-  res.status(401).json({
-    error: true,
-    message: "Login Failure",
-  });
-};
-export const handleLoginSuccess = (req, res) => {
-  if (req.user) {
-    res.status(200).json({
-      error: false,
-      message: "Successfully Logged In",
-      user: req.user,
-    });
-  } else {
-    res.status(403).json({
-      error: true,
-      message: "Not Authorized",
-    });
-  }
-};
-export const handleLogout = (req, res) => {
-  req.logout();
-  res.redirect(process.env.CLIENT_URL);
 };

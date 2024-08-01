@@ -48,7 +48,11 @@ userSchema.static(
   "matchPasswordAndGenerateToken",
   async function (email, password) {
     const user = await this.findOne({ email });
-    if (!user) throw new Error("User not found!!");
+    if (!user) {
+      const error = new Error("User not found!!");
+      error.statusCode = 404;
+      throw error;
+    }
     const salt = user.salt;
     const hashedPassword = user.password;
     const userHashedPassword = crypto
@@ -56,7 +60,9 @@ userSchema.static(
       .update(password)
       .digest("hex");
     if (userHashedPassword !== hashedPassword) {
-      throw new Error("Incorrect Password!");
+      const error = new Error("Incorrect Password!");
+      error.statusCode = 401;
+      throw error;
     }
     const token = createToken(user);
     return token;

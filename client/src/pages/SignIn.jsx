@@ -10,9 +10,7 @@ import {
 import OAuth from "../components/OAuth";
 export default function SignIn() {
   const [formData, setFormData] = useState({});
-  const {loading, error: errorMessage} = useSelector(
-    (state) => state.user
-  );
+  const { loading, error: errorMessage } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -31,10 +29,9 @@ export default function SignIn() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      if (data.success === false) {
-        dispatch(signInFailure(data.message));
-      }
-      if (res.ok) {
+      if (!res.ok) {
+        dispatch(signInFailure(data.message || "An error occurred"));
+      } else {
         dispatch(signInSuccess(data));
         navigate("/");
       }
