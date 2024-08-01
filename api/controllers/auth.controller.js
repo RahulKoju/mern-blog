@@ -21,7 +21,6 @@ export const handleSignUp = async (req, res, next) => {
   }
 };
 export const handleSignIn = async (req, res, next) => {
-  console.log(req.body);
   const { email, password } = req.body;
   if (!email || !password || email === "" || password === "") {
     return next(errorHandler(400, "All feilds are required."));
