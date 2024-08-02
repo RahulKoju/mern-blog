@@ -36,6 +36,21 @@ export const handleSignIn = async (req, res, next) => {
       })
       .json(rest);
   } catch (error) {
-    next(errorHandler(error.statusCode || 500, error.message || "An error occurred during sign in"));
+    next(
+      errorHandler(
+        error.statusCode || 500,
+        error.message || "An error occurred during sign in"
+      )
+    );
+  }
+};
+export const handleSignOut = (req, res, next) => {
+  try {
+    res
+      .clearCookie("Access_token")
+      .status(200)
+      .json({ message: "User has been signed out" });
+  } catch (error) {
+    next(error);
   }
 };
