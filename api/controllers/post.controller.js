@@ -75,3 +75,20 @@ export const deletePost = async (req, res, next) => {
     next(error);
   }
 };
+export const updatePost = async (req, res, next) => {
+  if (!req.user.isAdmin || req.params.userId !== req.user._id) {
+    return next(errorHandler(403, "You are not allowed to update this post"));
+  }
+  try {
+    const { title, category, image, content } = req.body;
+    const post = await Post.findById(req.params.postId);
+    post.title = title;
+    post.category = category;
+    post.image = image;
+    post.content = content;
+    await post.save();
+    res.status(200).json(post);
+  } catch (error) {
+    next(error);
+  }
+};
