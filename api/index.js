@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import postRoutes from "./routes/post.routes.js";
+import commentRoutes from "./routes/comment.route.js";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 import cookieParser from "cookie-parser";
 
@@ -26,7 +27,8 @@ app.use(cookieParser());
 //Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/post",postRoutes);
+app.use("/api/post", postRoutes);
+app.use("/api/comment", commentRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server started at port:${PORT}`);
