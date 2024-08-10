@@ -103,7 +103,7 @@ export const getComments = async (req, res, next) => {
     const comments = await Comment.find()
       .populate({
         path: "postId", // Path to populate
-        select: "title", // Field to select from the Post model
+        select: "title slug", // Selecting both title and slug
       })
       .populate({
         path: "userId", // Path to populate user details

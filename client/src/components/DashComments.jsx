@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Button, Modal, Table } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { Link } from "react-router-dom";
 export default function DashComments() {
   const { currentUser } = useSelector((state) => state.user);
   const [comments, setComments] = useState([]);
@@ -30,14 +31,13 @@ export default function DashComments() {
   const handleShowMore = async () => {
     const startIndex = comments.length;
     try {
-      const res = await fetch(`/api/comment/getComments?startIndex=${startIndex}`);
+      const res = await fetch(
+        `/api/comment/getComments?startIndex=${startIndex}`
+      );
       const data = await res.json();
       if (res.ok) {
         setComments((prev) => [...prev, ...data.comments]);
         if (comments.length + data.comments.length >= data.totalComments) {
-          //userpost:already-fetched (dekhairako)
-          //datapost:newly-fetched (showmore click garesi dekhako)
-          //totalpost:all-post-in-the-server
           setShowMore(false);
         }
       }
@@ -92,9 +92,18 @@ export default function DashComments() {
                   <Table.Cell>
                     {new Date(comment.updatedAt).toLocaleDateString()}
                   </Table.Cell>
-                  <Table.Cell>{comment.content}</Table.Cell>
+                  <Table.Cell className="line-clamp-2">
+                    {comment.content}
+                  </Table.Cell>
                   <Table.Cell>{comment.numberOfLikes}</Table.Cell>
-                  <Table.Cell>{comment.postId.title}</Table.Cell>
+                  <Table.Cell>
+                    <Link
+                      className="line-clamp-2"
+                      to={`/post/${comment.postId.slug}`}
+                    >
+                      {comment.postId.title}
+                    </Link>
+                  </Table.Cell>
                   <Table.Cell>{comment.userId.fullname}</Table.Cell>
                   <Table.Cell>
                     <span
