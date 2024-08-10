@@ -7,6 +7,7 @@ import {
   HiOutlineUserGroup,
   HiUser,
 } from "react-icons/hi";
+import { FaComment } from "react-icons/fa";
 import { signOutSuccess } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 export default function DashSidebar() {
@@ -68,6 +69,16 @@ export default function DashSidebar() {
               icon={HiOutlineUserGroup}
             >
               Users
+            </Sidebar.Item>
+          )}
+          {currentUser.isAdmin && (
+            <Sidebar.Item
+              as={Link}
+              to="/dashboard?tab=comments"
+              active={tab === "comments"}
+              icon={FaComment}
+            >
+              Comments
             </Sidebar.Item>
           )}
           <Sidebar.Item
