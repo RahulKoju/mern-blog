@@ -43,6 +43,10 @@ export default function Header() {
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
   };
+  const handleIconClick = () => {
+    // Trigger the form submission when the icon is clicked
+    handleSubmit(new Event("submit"));
+  };
   return (
     <Navbar className="border-b-2">
       <Link
@@ -54,17 +58,27 @@ export default function Header() {
         </span>
         Blog
       </Link>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="flex items-center relative">
         <TextInput
           type="text"
           placeholder="Search..."
-          rightIcon={AiOutlineSearch}
           className="hidden lg:inline"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+        <AiOutlineSearch
+          className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer hidden lg:inline"
+          size={20}
+          onClick={handleIconClick}
+        />
       </form>
-      <Button className="w-12 h-10 lg:hidden" color="gray" pill>
+      <Button
+        type="button"
+        className="pt-1 w-12 h-10 lg:hidden"
+        color="gray"
+        pill
+        onClick={handleIconClick}
+      >
         <AiOutlineSearch />
       </Button>
       <div className="flex gap-2 md:order-2">
