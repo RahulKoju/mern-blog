@@ -7,7 +7,6 @@ import {
   signInSuccess,
   signInFailure,
 } from "../redux/user/userSlice";
-import OAuth from "../components/OAuth";
 export default function SignIn() {
   const [formData, setFormData] = useState({});
   const { loading, error: errorMessage } = useSelector((state) => state.user);
@@ -75,7 +74,9 @@ export default function SignIn() {
                 placeholder="*******"
                 onChange={handleChange}
               />
-              <span className="flex justify-end pt-1 text-sm hover:underline text-blue-500"><Link to="/forgot-password">Forgot password?</Link></span>
+              <span className="flex justify-end pt-1 text-sm hover:underline text-blue-500">
+                <Link to="/forgot-password">Forgot password?</Link>
+              </span>
             </div>
             <Button
               gradientDuoTone="purpleToPink"
