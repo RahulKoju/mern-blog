@@ -15,6 +15,8 @@ import UpdatePost from "./pages/UpdatePost";
 import Post from "./pages/Post";
 import ScrollToTop from "./components/ScrollToTop";
 import Search from "./pages/Search";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 export default function App() {
   return (
     <BrowserRouter>
@@ -26,6 +28,10 @@ export default function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/about" element={<About />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/post/:postSlug" element={<Post />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
         </Route>
@@ -33,8 +39,6 @@ export default function App() {
           <Route path="/create-post" element={<CreatePost />} />
           <Route path="/update-post/:postId" element={<UpdatePost />} />
         </Route>
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/post/:postSlug" element={<Post />} />
       </Routes>
       <Footer />
     </BrowserRouter>

@@ -1,44 +1,52 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  signInStart,
-  signInSuccess,
-  signInFailure,
-} from "../redux/user/userSlice";
-import OAuth from "../components/OAuth";
-export default function SignIn() {
-  const [formData, setFormData] = useState({});
-  const { loading, error: errorMessage } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
+
+export default function ForgotPassword() {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const navigate = useNavigate();
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+    setEmail(e.target.value);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.email || !formData.password) {
-      return dispatch(signInFailure("Please fill out all the feilds"));
+    if (!email) {
+      return setErrorMessage("Please enter your email address.");
     }
+
+    setLoading(true);
+    setErrorMessage(null);
+    setSuccessMessage(null);
+
     try {
-      dispatch(signInStart());
-      const res = await fetch("/api/auth/signin", {
+      const res = await fetch("/api/auth/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ email }),
       });
+
       const data = await res.json();
+      setLoading(false);
+
       if (!res.ok) {
-        dispatch(signInFailure(data.message || "An error occurred"));
+        setErrorMessage(data.message || "An error occurred");
       } else {
-        dispatch(signInSuccess(data));
-        navigate("/");
+        setSuccessMessage("Password reset link has been sent to your email.");
+        setTimeout(() => {
+          navigate("/sign-in");
+        }, 3000); // Redirect to sign-in after 3 seconds
       }
     } catch (error) {
-      dispatch(signInFailure(error.message));
+      setLoading(false);
+      setErrorMessage(error.message);
     }
   };
+
   return (
     <div className="min-h-screen mt-20">
       <div className="flex mx-auto max-w-3xl flex-col md:flex-row md:items-center gap-5 p-5">
@@ -51,31 +59,21 @@ export default function SignIn() {
             Blog
           </Link>
           <p className="mt-5 text-sm">
-            This is a demo project. You can sign up with your email and password
-            or with Google.
+            Please enter your email address. You will receive a link to create a
+            new password via email.
           </p>
         </div>
         {/* right */}
         <div className="flex-1">
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div>
-              <Label value="Your email" />
+              <Label value="Enter your email" />
               <TextInput
                 type="email"
                 id="email"
                 placeholder="example@gmail.com"
                 onChange={handleChange}
               />
-            </div>
-            <div>
-              <Label value="Your password" />
-              <TextInput
-                type="password"
-                id="password"
-                placeholder="*******"
-                onChange={handleChange}
-              />
-              <span className="flex justify-end pt-1 text-sm hover:underline text-blue-500"><Link to="/forgot-password">Forgot password?</Link></span>
             </div>
             <Button
               gradientDuoTone="purpleToPink"
@@ -88,18 +86,19 @@ export default function SignIn() {
                   <span className="pl-3">Loading...</span>
                 </>
               ) : (
-                "Sign In"
+                "Send Reset Link"
               )}
             </Button>
           </form>
-          <div className="flex gap-1 text-sm">
-            <span>Don't have an account?</span>
-            <Link to="/sign-up" className="text-blue-500">
-              Sign Up
+          <div className="flex gap-1 text-sm mt-4">
+            <span>Remember your password?</span>
+            <Link to="/sign-in" className="text-blue-500">
+              Sign In
             </Link>
           </div>
           <div className="h-10 mt-5">
             {errorMessage && <Alert color="failure">{errorMessage}</Alert>}
+            {successMessage && <Alert color="success">{successMessage}</Alert>}
           </div>
         </div>
       </div>
