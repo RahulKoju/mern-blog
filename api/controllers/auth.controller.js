@@ -70,6 +70,8 @@ export const handleForgotPassword = async (req, res, next) => {
         .status(400)
         .json({ message: "User with this email does not exist." });
     }
+    //we can also use jwt instead of creating a tokenschema and pass this token as a token for reseting the password
+    //const token = jwt.sign({id: user._id}, "jwt_secret_key", {expiresIn: "1d"})
     let token = await Token.findOne({ userId: user._id });
     if (!token) {
       token = new Token({
@@ -95,6 +97,8 @@ export const handleResetPassword = async (req, res, next) => {
   const { token } = req.params;
   const { password } = req.body;
   try {
+    //And use jwt verification for verifying the token if it is valid or not
+    //const payload = jwt.verify(token, secret);
     const resetToken = await Token.findOne({ token });
     if (!resetToken) {
       return res.status(400).json({ message: "Invalid or expired token" });
