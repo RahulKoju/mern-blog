@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
@@ -18,7 +18,16 @@ import Search from "./pages/Search";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import EmailVerify from "./pages/EmailVerify";
+import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { signOutSuccess } from "./redux/user/userSlice";
 export default function App() {
+  const dispatch=useDispatch();
+  useEffect(()=>{
+    if(!Cookies.get("Access_token")){
+      dispatch(signOutSuccess());
+    }
+  },[])
   return (
     <BrowserRouter>
       <ScrollToTop />
