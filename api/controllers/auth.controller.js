@@ -16,10 +16,23 @@ export const handleSignUp = async (req, res, next) => {
   ) {
     next(errorHandler(400, "All feilds are required."));
   }
-  const newUser = new User({ fullname, email, password });
   try {
+    const newUser = new User({ fullname, email, password });
     await newUser.save();
-    res.json("sign Up successfull");
+    const token = new Token({
+      userId: newUser._id,
+      token: crypto.randomBytes(32).toString("hex"),
+    });
+    await token.save();
+    const url = `${process.env.CLIENT_URL}/verify-email/${token.token}`;
+    const text = `<p>Click the link below to verify your email:</p>
+        <a href="${url}">${url}</a>
+        <p>If you didn't request this, please ignore this email.</p>`;
+    await sendEmail(newUser.email, "Verify Email", text);
+    res.status(200).send({
+      message:
+        "Sign Up successfull, please check your email to verify your account.",
+    });
   } catch (error) {
     next(error);
   }
@@ -41,12 +54,28 @@ export const handleSignIn = async (req, res, next) => {
       })
       .json(rest);
   } catch (error) {
-    next(
-      errorHandler(
-        error.statusCode || 500,
-        error.message || "An error occurred during sign in"
-      )
-    );
+    if (error.needsVerification) {
+      // Generate a new verification token and send email if the user needs to verify their email
+      let token = await Token.findOne({ userId: error.userId });
+      if (!token) {
+        token = await new Token({
+          userId: error.user._id,
+          token: crypto.randomBytes(32).toString("hex"),
+        }).save();
+      }
+
+      const url = `${process.env.CLIENT_URL}/verify-email/${token.token}`;
+      const text = `<p>Click the link below to verify your email:</p>
+        <a href="${url}">${url}</a>
+        <p>If you didn't request this, please ignore this email.</p>`;
+      await sendEmail(error.user.email, "Verify Email", text);
+      return res.status(400).json({
+        message:
+          "Please verify your email before logging in. A verification email has been sent to your account.",
+      });
+    }
+
+    next(error);
   }
 };
 
@@ -113,6 +142,26 @@ export const handleResetPassword = async (req, res, next) => {
     await user.save();
     await resetToken.deleteOne();
     res.status(200).json({ message: "Password has been reset." });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const verifyEmail = async (req, res, next) => {
+  const { token } = req.params;
+  try {
+    const foundToken = await Token.findOne({ token });
+    if (!foundToken) {
+      return res.status(400).json({ message: "Invalid or expired token" });
+    }
+    const user = await User.findById(foundToken.userId);
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+    user.isVerified = true;
+    await user.save();
+    await foundToken.deleteOne();
+    res.status(200).json({ message: "Email verified successfully." });
   } catch (error) {
     next(error);
   }

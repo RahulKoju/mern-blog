@@ -5,6 +5,7 @@ import {
   handleSignIn,
   handleSignOut,
   handleSignUp,
+  verifyEmail,
 } from "../controllers/auth.controller.js";
 import validation from "../middlewares/validation.middleware.js";
 import {
@@ -23,4 +24,5 @@ router.post(
   validation(resetPasswordSchema),
   handleResetPassword
 );
+router.get("/verify-email/:token", verifyEmail);
 export default router;

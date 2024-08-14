@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
@@ -51,6 +55,14 @@ userSchema.static(
     if (!user) {
       const error = new Error("User not found!!");
       error.statusCode = 404;
+      throw error;
+    }
+    if (!user.isVerified) {
+      // Throw an error to notify the user to verify their email.
+      const error = new Error("Please verify your email before logging in.");
+      error.statusCode = 400;
+      error.needsVerification = true; // Custom property to indicate this error needs a verification email to be sent.
+      error.user=user;
       throw error;
     }
     const salt = user.salt;
