@@ -22,7 +22,7 @@ export default function ResetPassword() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!password || !confirmPassword) {
-      return setError("Please enter a new passowrd.");
+      return setError("Please Fill out all the feilds");
     }
     setLoading(true);
     setError("");
@@ -38,7 +38,7 @@ export default function ResetPassword() {
       const res = await fetch(`/api/auth/reset-password/${token}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ password , confirmPassword }),
       });
       const data = await res.json();
       setLoading(false);
