@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 export default function SignUp() {
   const [formData, setFormData] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -29,7 +30,10 @@ export default function SignUp() {
         return setErrorMessage(data.message);
       }
       if (res.ok) {
-        navigate("/sign-in");
+        setSuccessMessage(
+          "Sign Up successful, please check your email to verify your account."
+        );
+        setTimeout(() => navigate("/sign-in"), 10000);
       }
     } catch (error) {
       setErrorMessage(error.message);
@@ -104,11 +108,8 @@ export default function SignUp() {
             </Link>
           </div>
           <div className="h-10 mt-5">
-            {errorMessage && (
-              <Alert color="failure">
-                {errorMessage}
-              </Alert>
-            )}
+            {errorMessage && <Alert color="failure">{errorMessage}</Alert>}
+            {successMessage && <Alert color="success">{successMessage}</Alert>}
           </div>
         </div>
       </div>
