@@ -29,7 +29,7 @@ export default function FooterCom() {
             <div>
                 <Footer.Title title="Follow us"/>
                 <Footer.LinkGroup col>
-                    <Footer.Link href="#" target="_blank" rel="noopener noreferrer">Github</Footer.Link>
+                    <Footer.Link href="https://github.com/RahulKoju" target="_blank" rel="noopener noreferrer">Github</Footer.Link>
                     <Footer.Link href="#" target="_blank" rel="noopener noreferrer">Discord</Footer.Link>
                 </Footer.LinkGroup>
             </div>
