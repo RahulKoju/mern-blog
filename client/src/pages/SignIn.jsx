@@ -1,11 +1,12 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   signInStart,
   signInSuccess,
   signInFailure,
+  clearError,
 } from "../redux/user/userSlice";
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -38,6 +39,9 @@ export default function SignIn() {
       dispatch(signInFailure(error.message));
     }
   };
+  useEffect(() => {
+    dispatch(clearError());
+  }, []);
   return (
     <div className="min-h-screen mt-20">
       <div className="flex mx-auto max-w-3xl flex-col md:flex-row md:items-center gap-5 p-5">
