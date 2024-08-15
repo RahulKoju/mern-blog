@@ -8,6 +8,7 @@ import {
   signInFailure,
   clearError,
 } from "../redux/user/userSlice";
+import PasswordInput from "../components/PasswordInput";
 export default function SignIn() {
   const [formData, setFormData] = useState({});
   const { loading, error: errorMessage } = useSelector((state) => state.user);
@@ -72,8 +73,7 @@ export default function SignIn() {
             </div>
             <div>
               <Label value="Your password" />
-              <TextInput
-                type="password"
+              <PasswordInput
                 id="password"
                 placeholder="*******"
                 onChange={handleChange}

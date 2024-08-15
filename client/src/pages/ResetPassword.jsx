@@ -1,6 +1,7 @@
-import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
+import { Alert, Button, Label, Spinner } from "flowbite-react";
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import PasswordInput from "../components/PasswordInput";
 
 export default function ResetPassword() {
   const { token } = useParams();
@@ -38,7 +39,7 @@ export default function ResetPassword() {
       const res = await fetch(`/api/auth/reset-password/${token}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password , confirmPassword }),
+        body: JSON.stringify({ password, confirmPassword }),
       });
       const data = await res.json();
       setLoading(false);
@@ -69,23 +70,19 @@ export default function ResetPassword() {
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div>
               <Label htmlFor="password" value="New Password" />
-              <TextInput
-                type="password"
+              <PasswordInput
                 id="password"
-                placeholder="*******"
+                placeholder="********"
                 onChange={handlePasswordChange}
-                value={password}
                 aria-required="true"
               />
             </div>
             <div>
               <Label htmlFor="confirmPassword" value="Confirm Password" />
-              <TextInput
-                type="password"
+              <PasswordInput
                 id="confirmPassword"
-                placeholder="*******"
+                placeholder="********"
                 onChange={handleConfirmPasswordChange}
-                value={confirmPassword}
                 aria-required="true"
               />
             </div>
