@@ -5,7 +5,7 @@ import {BsFacebook, BsInstagram, BsTwitter, BsDiscord} from "react-icons/bs"
 export default function FooterCom() {
   return (
     <Footer className="border border-t-8 border-purple-500">
-      <div className="w-full max-w-7xl mx-auto">
+      <div className="w-full max-w-7xl mx-auto px-5">
         <div className="grid w-full justify-between sm:flex md:grid-cols-1">
           <div className="mt-5">
             <Link
