@@ -2,6 +2,9 @@
 
 A fully-featured Content Management System built with the MERN stack (MongoDB, Express.js, React, Node.js), featuring secure authentication, user roles, and modern UI components.
 
+## Live Demo
+🚀 [View Live Demo](https://mern-blog-xyxn.onrender.com/) - Deployed on Render
+
 ## Features
 
 - **Secure Authentication**
@@ -102,7 +105,9 @@ npm run dev
 
 ## Deployment
 
-The application is configured for deployment on Render. The build script handles both frontend and backend deployment:
+The application is deployed on Render and can be accessed at [https://mern-blog-xyxn.onrender.com/](https://mern-blog-xyxn.onrender.com/). 
+
+The build script handles both frontend and backend deployment:
 
 ```bash
 npm run build
@@ -117,7 +122,6 @@ mern-blog/
 ├── package.json      # Backend dependencies
 └── README.md
 ```
-
 
 ## Contributing
 
